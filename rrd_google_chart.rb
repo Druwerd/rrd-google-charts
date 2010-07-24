@@ -38,7 +38,7 @@ class RRDGoogleChart
           
           var annotatedtimeline = new google.visualization.AnnotatedTimeLine(
               document.getElementById('visualization'));
-          annotatedtimeline.draw(data, {'displayAnnotations': true});
+          annotatedtimeline.draw(data, {'displayAnnotations': true, 'dateFormat' : 'HH:mm MMMM dd, yyyy'});
         }]
         
         columns = @columns.join("\n")
