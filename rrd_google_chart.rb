@@ -77,7 +77,7 @@ if __FILE__ == $0
         require 'rrd_fetch.rb'
         chart = RRDGoogleChart.new
 	ARGV.each do |file|
-            title = File.basename(file)
+            title = File.basename(file, '.rrd')
             data = rrd_fetch(file)
             data.delete_at(0)
             data = data.select{|d| not d[1].nan? }
