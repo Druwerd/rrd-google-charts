@@ -31,6 +31,7 @@ class RRDGoogleChart
     
     def to_js
         javascript = %[
+	google.load('visualization', '1', {packages: ['annotatedtimeline']});
         function drawVisualization() {
           var data = new google.visualization.DataTable();
           data.addColumn('date', 'Date');
@@ -39,7 +40,9 @@ class RRDGoogleChart
           var annotatedtimeline = new google.visualization.AnnotatedTimeLine(
               document.getElementById('visualization'));
           annotatedtimeline.draw(data, {'displayAnnotations': true, 'dateFormat' : 'HH:mm MMMM dd, yyyy'});
-        }]
+        }
+	google.setOnLoadCallback(drawVisualization);
+	]
         
         columns = @columns.join("\n")
 	rows = "data.addRows(#{@row_count});\n"
@@ -47,17 +50,40 @@ class RRDGoogleChart
         
         javascript % (columns + rows + data_points)
     end
+
+    def to_html
+        html = %{
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Google Visualization API Sample</title>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+%s
+  </script>
+</head>
+<body style="font-family: Arial;border: 0 none;">
+<div id="visualization" style="width: 800px; height: 400px;"></div>
+</body>
+</html>}
+
+        html % self.to_js
+    end
 end
 
 if __FILE__ == $0
     if ARGV[0]
         require 'rrd_fetch.rb'
-        data = rrd_fetch(ARGV[0])
-        data.delete_at(0)
-        data = data.select{|d| not d[1].nan? }
         chart = RRDGoogleChart.new
-        chart.add_plot_data('CPU', data)
+	ARGV.each do |file|
+            title = File.basename(file)
+            data = rrd_fetch(file)
+            data.delete_at(0)
+            data = data.select{|d| not d[1].nan? }
+            chart.add_plot_data(title, data)
+	end
         chart.graph
-        puts chart.to_js
+        puts chart.to_html 
     end
 end
