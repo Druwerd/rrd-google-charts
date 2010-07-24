@@ -3,7 +3,7 @@
 require 'rrd_fetch.rb'
 
 $chart_url= %{http://chart.apis.google.com/chart
-?chxl=0:|0%3A00|4%3A00|8%3A00|12%3A00|16%3A00|20%3A00|24%3A00
+?chxl=0:|0%%3A00|4%%3A00|8%%3A00|12%%3A00|16%%3A00|20%%3A00|24%%3A00
 &chxp=0,0,16,32,48,64,80,96
 &chxs=0,676767,11.5,-1,l,676767
 &chxt=x,y
