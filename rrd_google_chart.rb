@@ -16,15 +16,15 @@ class RRDGoogleChart
         series_count = 0
         @plot_data.each do |title, plot_data|
             series_count += 1
-            @columns += "data.addColumn('number', '#{title}');"
-            @columns += "data.addColumn('string', 'title#{series_count}');"
-            @columns += "data.addColumn('string', 'text#{series_count}');"
+            @columns << "data.addColumn('number', '#{title}');"
+            @columns << "data.addColumn('string', 'title#{series_count}');"
+            @columns << "data.addColumn('string', 'text#{series_count}');"
             plot_data.each_index do |i|
                 data_point = plot_data[i]
-                time_value = Time.new(data_point.first.to_i)
+                time_value = Time.at(data_point.first.to_i)
                 data_value = data_point.last
-                @data_points += "data.setValue(#{i}, 0, new Date(#{time_value.year}, #{time_value.month.to_i -1} ,#{time_value.day}));"
-                @data_points += "data.setValue(#{i}, #{(series_count==1)? 1 : 1 + (series_count-1)*3}, #{data_value});"
+                @data_points << "data.setValue(#{i}, 0, new Date(#{time_value.year}, #{time_value.month.to_i() - 1} ,#{time_value.day}));"
+                @data_points << "data.setValue(#{i}, #{(series_count==1)? 1 : 1 + (series_count-1)*3}, #{data_value});"
             end
         end
     end
@@ -41,9 +41,21 @@ class RRDGoogleChart
           annotatedtimeline.draw(data, {'displayAnnotations': true});
         }]
         
-        columns = @coluns.join("\n")
+        columns = @columns.join("\n")
         data_points = @data_points.join("\n")
         
-        javascript % columns + data_points
+        javascript % (columns + data_points)
+    end
+end
+
+if __FILE__ == $0
+    if ARGV[0]
+        require 'rrd_fetch.rb'
+        data = rrd_fetch(ARGV[0])
+        data.delete_at(0)
+        chart = RRDGoogleChart.new
+        chart.add_plot_data('CPU', data)
+        chart.graph
+        puts chart.to_js
     end
 end
