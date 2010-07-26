@@ -52,6 +52,7 @@ if __FILE__ == $0
     chart = AnnotatedTimeLine.new
     ARGV.each do |file|
       title = File.basename(file, '.rrd')
+      title = "#{$1}-#{$2}-#{title}" if file =~ /(\w+)\.(\w+)\.\w+\.\w+/
       data = rrd_fetch(file)
       data.delete_at(0)
       data = data.select{|d| not d[1].nan? }
