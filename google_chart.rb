@@ -22,7 +22,7 @@ class GoogleChart
 
   public
   def to_js
-    self.graph if @re_graph
+    graph if @re_graph
     javascript = <<-EOS
       google.load('visualization', '1', {packages: ['#{@chart_type}']});
       function drawVisualization() {

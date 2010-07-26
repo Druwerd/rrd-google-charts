@@ -5,7 +5,7 @@ require 'google_chart.rb'
 class AnnotatedTimeline < GoogleChart
 
   def initialize(element_id='visualization', width=800, height=400)
-    super(self.class.downcase, element_id)
+    super(self.class.to_s.downcase, element_id)
     @plot_data = {}
   end
 
@@ -54,7 +54,7 @@ if __FILE__ == $0
       data = rrd_fetch(file)
       data.delete_at(0)
       data = data.select{|d| not d[1].nan? }
-      chart.add_plot_data(title, data)
+      chart.add_data(title, data)
     end
     puts chart.to_html
   end
