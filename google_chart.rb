@@ -28,8 +28,7 @@ class GoogleChart
       function drawVisualization() {
         var data = new google.visualization.DataTable();
         %s
-        var annotatedtimeline = new google.visualization.#{self.class}(
-        document.getElementById('#{@element_id}'));
+        var annotatedtimeline = new google.visualization.#{self.class}(document.getElementById('#{@element_id}'));
         annotatedtimeline.draw(data, {#{@options}});
       }
       google.setOnLoadCallback(drawVisualization);

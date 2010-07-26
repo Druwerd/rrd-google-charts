@@ -2,11 +2,12 @@
 
 require 'google_chart.rb'
 
-class AnnotatedTimeline < GoogleChart
+class AnnotatedTimeLine < GoogleChart
 
   def initialize(element_id='visualization', width=800, height=400)
     super(self.class.to_s.downcase, element_id)
     @plot_data = {}
+    @options = "'displayAnnotations': true, 'dateFormat' : 'HH:mm MMMM dd, yyyy', 'legendPosition': 'newRow'"
   end
 
   def add_data(title, plot_data)
@@ -48,7 +49,7 @@ end
 if __FILE__ == $0
   if ARGV[0]
     require 'rrd_fetch.rb'
-    chart = AnnotatedTimeline.new
+    chart = AnnotatedTimeLine.new
     ARGV.each do |file|
       title = File.basename(file, '.rrd')
       data = rrd_fetch(file)
