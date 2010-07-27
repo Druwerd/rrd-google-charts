@@ -1,1 +1,6 @@
 Converts rrd files to Google Charts
+
+Install Gem dependencies with Bundler
+
+gem install bundler
+bundle install
