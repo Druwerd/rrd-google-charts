@@ -1,0 +1,19 @@
+--- 
+dependencies: 
+  rrd-ffi: 
+    group: 
+    - :default
+    version: = 0.2.1
+    require: 
+    - rrd
+specs: 
+- rake: 
+    version: 0.8.7
+- ffi: 
+    version: 0.6.3
+- rrd-ffi: 
+    version: 0.2.1
+hash: 1e3235af4a5ecadfbe65e320a29b4e9efd1e174b
+sources: 
+- Rubygems: 
+    uri: http://rubygems.org
