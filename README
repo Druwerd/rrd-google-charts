@@ -1,6 +1,6 @@
 Display rrd files with Google Charts API
 
-Install Gem dependencies with Bundler
+Install Gem dependencies with Rake
 
-gem install bundler
-bundle install
+gem install rake
+rake install
