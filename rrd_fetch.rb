@@ -1,9 +1,6 @@
 #!/usr/bin/ruby 
 
 require 'rubygems'
-require 'bundler'
-Bundler.setup
-
 require 'rrd'
 
 def rrd_fetch(filename, consolidation_function="AVERAGE", start_time=nil, end_time=nil)
