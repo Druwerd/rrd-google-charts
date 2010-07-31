@@ -7,16 +7,19 @@ class AnnotatedTimeLine < GoogleChart
   def initialize(element_id='visualization', width=800, height=400)
     super(self.class.to_s.downcase, element_id)
     @plot_data = {}
-    @options = "'displayAnnotations': true, 'dateFormat' : 'HH:mm MMMM dd, yyyy', 'legendPosition': 'newRow'"
-  end
-
-  def add_data(title, plot_data)
-    @re_graph = true
-    @plot_data[title] = plot_data
+    @options << "'displayAnnotations': true"
+    @options << "'dateFormat' : 'HH:mm MMMM dd, yyyy'"
+    @options << "'legendPosition': 'newRow'"
+    
+    zoom_start_time = Time.now - 60*60*24
+    zoom_end_time = Time.now
+    @options << "'zoomStartTime': new Date(#{zoom_start_time.year}, #{zoom_start_time.month.to_i() - 1}, #{zoom_start_time.day}, #{zoom_start_time.hour}, #{zoom_start_time.min})"
+    @options << "'zoomEndTime': new Date(#{zoom_end_time.year}, #{zoom_end_time.month.to_i() - 1}, #{zoom_end_time.day}, #{zoom_end_time.hour}, #{zoom_end_time.min})"
   end
 
   private
   def graph
+    super()
     @data = ""
     columns = ["data.addColumn('date', 'Date');"]
     row_count = 0
@@ -51,12 +54,7 @@ if __FILE__ == $0
     require 'rrd_fetch.rb'
     chart = AnnotatedTimeLine.new
     ARGV.each do |file|
-      title = File.basename(file, '.rrd')
-      title = "#{$1}-#{$2}-#{title}" if file =~ /(\w+)\.(\w+)\.\w+\.\w+/
-      data = rrd_fetch(file)
-      data.delete_at(0)
-      data = data.select{|d| not d[1].nan? }
-      chart.add_data(title, data)
+      chart << file
     end
     puts chart.to_html
   end
